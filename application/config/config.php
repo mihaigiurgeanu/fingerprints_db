@@ -3,8 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
  * The absolute url of the fingerprints masster server.
- * /
-$config['fingerprints_server_url'] = 'http://october-user.codio.io:3000';
+ */
+$config['fingerprints_server_url'] = 'http://october-user.codio.io:3000/';
 
 /*
  * The directory were images will be stored.

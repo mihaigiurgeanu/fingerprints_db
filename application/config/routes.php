@@ -52,3 +52,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+$route['api/fingerprintsscans/(.+)']['post'] = 'fingerprintsscans/update_scan_template/$1';
+$route['api/fingerprintsscans']['post'] = 'fingerprintsscans/add_new_scan';
+$route['api/fingerprintsscans/(.+)']['get'] = 'fingerprintsscans/get_scan/$1';
+
+$route['api/tokens']['post'] = 'tokens/create_token';
+$route['api/tokens/(:any)'] = 'tokens/get_token/$1';

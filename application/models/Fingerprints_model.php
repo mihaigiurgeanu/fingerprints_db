@@ -8,10 +8,12 @@ class Fingerprints_model extends CI_model {
     public function create_fingerprint() {
         $this->load->helper('uuid');
         $id = uuid_v5('dea36198-055e-4fe2-9e40-a86d93aba1a4', uniqid('fingerprints', TRUE));
-        
-        $file = fopen($this->config->item('fp_images_folder').$id, "w");
+        $filename = $this->config->item('fp_images_folder').$id;
+        log_message('info', "Saving new image scan to $filename.");
+        $file = fopen($filename, "w");
         if(! $file) {
-            return '';
+            log_message('error', "File $filename could not be open for writing.");
+            return FALSE;
         }
         
         fwrite($file, $this->input->raw_input_stream);
@@ -21,9 +23,11 @@ class Fingerprints_model extends CI_model {
             "id" => $id,
             "file_name" => $id
         );
-        $this->db->insert('fp_fingerprints', $data);
+        if($this->db->insert('fp_fingerprints', $data)) {
+            return $id;
+        }
         
-        return $id;
+        return FALSE;
     }
     
     public function get_fingerprint($id) {
