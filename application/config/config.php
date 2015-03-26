@@ -2,6 +2,16 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
+ * The absolute url of the fingerprints masster server.
+ * /
+$config['fingerprints_server_url'] = 'http://october-user.codio.io:3000';
+
+/*
+ * The directory were images will be stored.
+ */
+$config['fp_images_folder'] = '/home/codio/workspace/scans/';
+
+/*
 |--------------------------------------------------------------------------
 | Base Site URL
 |--------------------------------------------------------------------------
@@ -211,7 +221,7 @@ $config['directory_trigger'] = 'd';
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 0;
+$config['log_threshold'] = 4;
 
 /*
 |--------------------------------------------------------------------------

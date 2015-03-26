@@ -38,13 +38,16 @@
                             </div>
 
 
-                            <button type="submit" class="btn btn-primary" onclick="return false;">Submit Button</button>
-                            <button type="button" class="btn btn-default" onclick="window.open('http://localhost:3000');return false;">Scan fingerprints</button>
-                            <button type="button" class="btn btn-default" onclick="window.open('http://localhost:3000');return false;">Take picture</button>
-                            <button type="reset" class="btn btn-danger" onclick="return false;">Reset Button</button>
+                            <button type="submit" class="btn btn-primary" id="save-button">Save</button>
+                            <button type="button" class="btn btn-default" id="scan-button">Scan fingerprints</button>
+                            <button type="button" class="btn btn-default" id="photo-button">Take picture</button>
+                            <button type="reset" class="btn btn-danger" id="reset-button">Reset</button>
 
                         </form>
 
+                    </div>
+                    <div class="col-lg-6">
+                        <image id="fingerprint-scan" src="/api/fingerprintsscans/5339c7bc-d2ec-11e4-8dbb-cae8083ffdec"></image>
                     </div>
                     
                 </div>
