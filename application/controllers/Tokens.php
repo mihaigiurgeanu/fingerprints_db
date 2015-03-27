@@ -23,7 +23,7 @@ class Tokens extends CI_Controller {
                 ->set_output(json_encode(array('id' => $tokenid)));
         }
     }
-    
+        
     public function get_token($id = '') {
         log_message('info', "Atempt to read token id $id");
         $this->output->set_status_header('401');

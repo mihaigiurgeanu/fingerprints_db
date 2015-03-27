@@ -10,22 +10,30 @@ class Fingerprintsscans extends CI_Controller {
     }
 
     public function add_new_scan() {
+        log_message('debug', "add_new_scan()");
         if(is_user_authorized('scans.create')) {
             $tokenid = $this->input->get('tokenid');
+            log_message('debug', "add_new_scan(): user is authorized: $tokenid");
             if($tokenid === FALSE) {
+                log_message('info', 'Request to add_new_scan() without tokenid');
                 $this->output->set_status_header('401');
             } else {
                 $token = $this->tokens_model->get_token($tokenid);
                 if(empty($token) || $token["token_consumed"]) {
+                    log_message('info', "Token already consumed: $tokenid");
                     $this->output->set_status_header('401');
                 } else {
+                    log_message('debug', 'Saving the fingerprint');
                     $fingerprints_id = $this->fingerprints_model->create_fingerprint();
                     if($fingerprints_id) {
+                        $this->tokens_model->put_scan($tokenid, $fingerprints_id);
+                        $json_body = json_encode(array('id' => $fingerprints_id));
+                        log_message('debug', "add_new_scan() sending json response: $json_body");
                         $this->output
                             ->set_status_header('201')
                             ->set_content_type('application/json')
                             ->set_header('Location: '.$this->config->item('fingerprints_server_url')."api/fingerprintsscans/$fingerprints_id")
-                            ->set_output(json_encode(array('id' => $fingerprints_id)));
+                            ->set_output($json_body);
                     } else {
                         $this->output->set_status_header('500', 'Fingerprint not saved.');
                     }
@@ -35,6 +43,18 @@ class Fingerprintsscans extends CI_Controller {
             $this->output->set_status_header('401');
         }
     }
+
+    private function render_fingerprint($fingerprint) {
+        $filename = $this->config->item('fp_images_folder').$fingerprint["file_name"];
+        if(file_exists($filename)) {
+            $data['filename'] = $filename;
+            $this->load->view('bitmap', $data);
+        } else {
+            log_message('error', "File $filename not found");
+            $this->output->set_status_header('404', 'Image file not found');
+        }
+
+    }
     
     public function get_scan($id) {
         log_message('debug', "Getting image file for /api/fingerprintsscans/$id");
@@ -42,32 +62,32 @@ class Fingerprintsscans extends CI_Controller {
             $fingerprint = $this->fingerprints_model->get_fingerprint($id);
 
             if($fingerprint) {
-                $filename = $this->config->item('fp_images_folder').$fingerprint["file_name"];
-                if(file_exists($filename)) {
-
-                    header("Content-type: image/bmp");
-                    header("Expires: Mon, 1 Jan 2099 05:00:00 GMT");
-                    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-                    header("Cache-Control: no-store, no-cache, must-revalidate");
-                    header("Cache-Control: post-check=0, pre-check=0", false);
-                    header("Pragma: no-cache");
-
-                    $size= filesize($filename);
-                    header("Content-Length: $size bytes");
-
-                    log_message('debug', "Sending $filename with size $size");
-                    readfile($filename);
-                } else {
-                    log_message('error', "File $filename not found (serving scan for id {$id})");
-                    $this->output->set_status_header('400', 'Image file not found');
-
-                }
+                $this->render_fingerprint($fingerprint);
             } else {
                 log_message('info', "Received request for non existing scan id: $id.");
-                $this->output->set_status_header('400', 'Scan data not found');
+                $this->output->set_status_header('404', 'Scan data not found');
             }
         } else {
             $this->output->set_status_header('401');
+        }
+    }
+    
+    public function get_scan_by_tokenid() {
+        log_message('debug', "get_scan_by_tokenid() - controller");
+        if(is_user_authorized('scans.read') && is_user_authorized('tokens.read')) {
+            $tokenid = $this->input->get('tokenid');
+            if($tokenid) {
+                log_message('debug', "get_skan_by_tokenid - $tokenid");
+                $fingerprint = $this->fingerprints_model->get_fingerprint_by_tokenid($tokenid);
+                if($fingerprint) {
+                    $this->render_fingerprint($fingerprint);
+                } else {
+                    log_message('info', "There is no scan for tokenid: $tokenid.");
+                    $this->output->set_status_header('404', 'Scan data not found');
+                }
+            } else {
+                $this->output->set_status_header('400', 'Tokenid is required');
+            }
         }
     }
 }

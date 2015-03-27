@@ -15,12 +15,21 @@ if ( ! function_exists('is_user_authorized'))
         switch($service_code) {
             case "tokens.create":
             return TRUE;
-            
+
+            case "tokens.read":
+            return TRUE;
+
+            case "tokens.update":
+            return TRUE;
+
             case "scans.read":
             return TRUE;
             
             case "scans.create":
             return TRUE;
+            
+            case "scans.update":
+            return FALSE;
             
             default:
             return FALSE;

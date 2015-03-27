@@ -29,7 +29,7 @@ $("#scan-button").click(function(e) {
                 if(data.command == this.data.command && data.tokenid == this.data.tokenid) {
                     if(data.success) {
                         $.notify({message: "Scan command completed"}, {type: "success"});
-                        $("#fingerprint-scan").attr("src", "/api/fingerprintsscans/" + data.data.id)
+                        $("#fingerprint-scan").attr("src", "/api/fingerprintsscans?tokenid=" + this.data.tokenid);
                     } else {
                         $.notify({message: "Scan command failed"}, {type: "danger"});
                         console.log("Scaning failed with this message text: " + data.data);

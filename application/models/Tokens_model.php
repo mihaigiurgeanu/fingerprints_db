@@ -23,6 +23,15 @@ class Tokens_model extends CI_model {
         return FALSE;
     }
     
+    public function put_scan($tokenid, $fingerprints_id) {
+        $data['fingerprint_id'] = $fingerprints_id;
+        $data['token_consumed'] = TRUE;
+
+        $this->db->where('id',  $tokenid);
+        $this->db->update('fp_tokens', $data);
+    }
+
+    
     public function get_token($tokenid) {
         $query = $this->db->get_where('fp_tokens', array('id' => $tokenid));
         return $query->row_array();

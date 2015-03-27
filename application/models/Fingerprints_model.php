@@ -18,6 +18,7 @@ class Fingerprints_model extends CI_model {
         
         fwrite($file, $this->input->raw_input_stream);
         fclose($file);
+        log_message('info', "fingerprint image file saved: $filename");
         
         $data = array(
             "id" => $id,
@@ -33,6 +34,16 @@ class Fingerprints_model extends CI_model {
     public function get_fingerprint($id) {
         log_message('debug', "get_fingerprint: {$id}");
         $query = $this->db->get_where('fp_fingerprints', array('id' => $id));
+        return $query->row_array();
+    }
+    
+    public function get_fingerprint_by_tokenid($tokenid) {
+        log_message('debug', "get_fingerprint_by_tokenid($tokenid)");
+        $this->db->select('fp_fingerprints.id, fp_fingerprints.file_name');
+        $this->db->from('fp_fingerprints');
+        $this->db->join('fp_tokens', 'fp_tokens.fingerprint_id = fp_fingerprints.id');
+        $this->db->where('fp_tokens.id', $tokenid);
+        $query = $this->db->get();
         return $query->row_array();
     }
 }

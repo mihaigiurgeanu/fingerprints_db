@@ -7,7 +7,7 @@ class Persons extends CI_Controller {
         $data['page_scripts'] = ['addperson.js'];
 
         $this->load->view('templates/header', $data);
-        $this->load->view('pages/person.php', $data);
+        $this->load->view('pages/person', $data);
         $this->load->view('templates/footer', $data);
 
     }

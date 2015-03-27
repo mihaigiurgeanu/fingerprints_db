@@ -1,3 +1,6 @@
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
 
                 <!-- Page Heading -->
                 <div class="row">
@@ -13,25 +16,30 @@
                     </div>
                 </div>
                 <!-- /.row -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <?php echo validation_errors(); ?>
+                    </div>
+                </div>
                 
                 <div class="row">
                     <div class="col-lg-6">
 
-                        <form role="form">
+                        <?php echo form_open('persons/add')?>
 
                             <div class="form-group">
                                 <label for="first-name">First Name:</label>
-                                <input id="first-name" class="form-control"></input>
+                                <input name="first-name" valueclass="form-control"></input>
                             </div>
 
                             <div class="form-group">
                                 <label for="last-name">Last Name:</label>
-                                <input id="last-name" class="form-control"></input>
+                                <input name="last-name" class="form-control"></input>
                             </div>
 
                             <div class="form-group">
-                                <label>Description:</label>
-                                <textarea class="form-control" rows="3"></textarea>
+                                <label for="description">Description:</label>
+                                <textarea name="description" class="form-control" rows="3"></textarea>
                             </div>
 
 
@@ -50,3 +58,8 @@
                 </div>
                 <!-- /.row -->
 
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
