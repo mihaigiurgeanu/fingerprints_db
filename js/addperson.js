@@ -11,10 +11,6 @@ window.addEventListener("message", function(e) {
     }
 }, false);
 
-$("#save-button").click(function (e) {
-    e.preventDefault();
-});
-
 $("#scan-button").click(function(e) {
     e.preventDefault();
     var scan_request = $.post("/api/tokens", {type: "scan"});
