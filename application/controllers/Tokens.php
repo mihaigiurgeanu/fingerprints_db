@@ -9,7 +9,7 @@ class Tokens extends CI_Controller {
 
     public function create_token() {
         if(!is_user_authorized('tokens.create')) {
-            $this->output->set_status_header('401');
+            $this->output->set_status_header('403');
         } else {
             
             
@@ -26,7 +26,7 @@ class Tokens extends CI_Controller {
         
     public function get_token($id = '') {
         log_message('info', "Atempt to read token id $id");
-        $this->output->set_status_header('401');
+        $this->output->set_status_header('403');
     }
     
 }

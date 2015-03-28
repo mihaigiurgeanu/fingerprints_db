@@ -16,34 +16,53 @@ class Fingerprintsscans extends CI_Controller {
             log_message('debug', "add_new_scan(): user is authorized: $tokenid");
             if($tokenid === FALSE) {
                 log_message('info', 'Request to add_new_scan() without tokenid');
-                $this->output->set_status_header('401');
+                $this->output->set_status_header('403');
             } else {
+                $kind = $this->input->get('kind');
+                if($kind === FALSE || ($kind != 'scan' && $kind != 'template')) {
+                    log_message('info', 'Request dose not have the "kind" query parameter');
+                    $thid->output
+                        ->set_status_header('400')
+                        ->set_output('"kind" query parameter expected to be either "scan" or "template"');
+                }
                 $token = $this->tokens_model->get_token($tokenid);
-                if(empty($token) || $token["token_consumed"]) {
-                    log_message('info', "Token already consumed: $tokenid");
-                    $this->output->set_status_header('401');
+                if($token) {
+                    log_message('debug', "Token found for $tokenid");
+                    log_message('debug', "$tokenid - token_consumed: ".$token['token_consumed']);
+                    log_message('debug', "$tokenid - token_type: ".$token['token_type']);
+                }
+                if(empty($token) || $token["token_consumed"] || $token['token_type'] != 'scan') {
+                    log_message('info', "Token invalid or consumed: $tokenid");
+                    $this->output->set_status_header('403');
                 } else {
                     log_message('debug', 'Saving the fingerprint');
-                    $fingerprints_id = $this->fingerprints_model->create_fingerprint();
-                    if($fingerprints_id) {
-                        $this->tokens_model->put_scan($tokenid, $fingerprints_id);
-                        $json_body = json_encode(array('id' => $fingerprints_id));
-                        log_message('debug', "add_new_scan() sending json response: $json_body");
-                        $this->output
-                            ->set_status_header('201')
-                            ->set_content_type('application/json')
-                            ->set_header('Location: '.$this->config->item('fingerprints_server_url')."api/fingerprintsscans/$fingerprints_id")
-                            ->set_output($json_body);
+                    if($token["fingerprint_id"]) {
+                        if($this->fingerprints_model->update_fingerprint()) {
+                            $this->output->set_status_header(204);
+                        }
                     } else {
-                        $this->output->set_status_header('500', 'Fingerprint not saved.');
+                        $fingerprints_id = $this->fingerprints_model->create_fingerprint();    
+                        if($fingerprints_id) {
+                            $json_body = json_encode(array('id' => $fingerprints_id));
+                            log_message('debug', "add_new_scan() sending json response: $json_body");
+                            $this->output
+                                ->set_status_header('201')
+                                ->set_content_type('application/json')
+                                ->set_header('Location: '.$this->config->item('fingerprints_server_url')."api/fingerprintsscans/$fingerprints_id")
+                                ->set_output($json_body);
+                        } else {
+                            $this->output->set_status_header('500', 'Fingerprint not saved.');
+                        }
+
                     }
+                    
                 }
             }
         } else {
             $this->output->set_status_header('401');
         }
     }
-
+    
     private function render_fingerprint($fingerprint) {
         $filename = $this->config->item('fp_images_folder').$fingerprint["file_name"];
         if(file_exists($filename)) {

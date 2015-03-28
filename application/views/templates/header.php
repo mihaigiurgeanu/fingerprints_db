@@ -156,7 +156,7 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li <?php if($sidebar_active == "persons") { ?> class="active" <?php } ?>>
-                        <a href="/index.php/persons/add"><i class="fa fa-fw fa-edit"></i> Persons</a>
+                        <a href="/index.php/persons"><i class="fa fa-fw fa-edit"></i> Persons</a>
                     </li>
                 </ul>
             </div>

@@ -23,9 +23,17 @@
     -->
 
     <script src="/js/bootstrap-notify.min.js"></script>
-<?php foreach ($page_scripts as $script) { ?>
+<?php 
+if($page_scripts) 
+{ 
+    foreach ($page_scripts as $script) 
+    { 
+?>
     <script src="/js/<?php echo $script ?>"></script>
-<?php } ?>
+<?php 
+    }
+}
+?>
 
 </body>
 

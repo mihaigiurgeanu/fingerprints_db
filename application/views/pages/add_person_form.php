@@ -21,30 +21,31 @@
                 <div class="row">
                     <div class="col-lg-6">
 
-                        <?php echo form_open('persons/add')?>
+                        <?php echo form_open('persons/add', array('id' => 'person-form'))?>
 
                             <div class="form-group">
-                                <label for="first-name">First Name:</label>
-                                <input name="first-name" valueclass="form-control"></input>
+                                <label for="first_name">First Name:</label>
+                                <input name="first_name" class="form-control" value="<?php echo set_value('first_name'); ?>"></input>
                             </div>
 
                             <div class="form-group">
-                                <label for="last-name">Last Name:</label>
-                                <input name="last-name" class="form-control"></input>
+                                <label for="last_name">Last Name:</label>
+                                <input name="last_name" class="form-control" value="<?php echo set_value('last_name'); ?>"></input>
                             </div>
 
                             <div class="form-group">
                                 <label for="description">Description:</label>
-                                <textarea name="description" class="form-control" rows="3"></textarea>
+                                <textarea name="description" class="form-control" rows="3"><?php echo set_value('description'); ?></textarea>
                             </div>
 
+                            <input type="hidden" name="scan_tokenid" value="<?php echo set_value('scan_tokenid'); ?>"></input>
 
                             <button type="submit" class="btn btn-primary" id="save-button">Save</button>
                             <button type="button" class="btn btn-default" id="scan-button">Scan fingerprints</button>
                             <button type="button" class="btn btn-default" id="photo-button">Take picture</button>
                             <button type="reset" class="btn btn-danger" id="reset-button">Reset</button>
 
-                        </form>
+                        <?php form_close() ?>
 
                     </div>
                     <div class="col-lg-6">

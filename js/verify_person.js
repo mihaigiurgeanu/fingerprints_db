@@ -11,22 +11,22 @@ window.addEventListener("message", function(e) {
     }
 }, false);
 
-$("#scan-button").click(function(e) {
+$("a.verify-person").click(function(e) {
     e.preventDefault();
-    var scan_request = $.post("/api/tokens", {type: "scan"});
+    var verify_request = $.post("/api/tokens", {type: "verify"});
     scan_request.done(function(token) {
         console.log("Received token: " + token.id);
         command = {
             data: {
-                command: "fingerprintsscans", 
+                command: "verify", 
                 tokenid: token.id?token.id:"none"
             },
             oncomplete: function(data) {
                 if(data.command == this.data.command && data.tokenid == this.data.tokenid) {
                     if(data.success) {
+                        
                         $.notify({message: "Scan command completed"}, {type: "success"});
                         $("#fingerprint-scan").attr("src", "/api/fingerprintsscans?tokenid=" + this.data.tokenid);
-                        console.log("Setting value of scan_tokenid input: " + this.data.tokenid);
                         $("#person-form input[name=scan_tokenid]").val(this.data.tokenid);
                     } else {
                         $.notify({message: "Scan command failed"}, {type: "danger"});
