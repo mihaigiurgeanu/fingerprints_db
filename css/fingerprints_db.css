@@ -1,0 +1,12 @@
+/*
+    Document   : css/fingerprints_db.css
+    Created on : 2015-03-29 08:12 AM
+    Author     : gmihai
+    Description:
+    Purpose of the stylesheet follows.
+    To change this template use Tools | Templates.
+*/
+
+td.check, th.check {
+    text-align: center;
+}

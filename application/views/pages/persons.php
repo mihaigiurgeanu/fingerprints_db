@@ -21,6 +21,8 @@
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Descrption</th>
+                    <th class="check">Photo</th>
+                    <th class="check">Fingerprints</th>
                     <th></th>
                 </tr>
             </thead>
@@ -37,8 +39,10 @@
                     <td><?php echo $person['first_name']; ?></td>
                     <td><?php echo $person['last_name']; ?></td>
                     <td><?php echo $person['description'] ?></td>
+                    <td class="check"><?php if($person['photo_id']) {?><i class="fa fa-check fa-lg"></i><?php } ?></td>
+                    <td class="check"><?php if($person['fingerprints_id']) {?><i class="fa fa-check fa-lg"></i><?php } ?></td>
                     <td>
-                        <a href="#" class="verify-person" title="Verify"><i class="fa fa-cog"></i></a>
+                        <a href="#" class="verify-person" title="Verify" data-person-id="<?php echo $person['id'] ?>"><i class="fa fa-cog"></i></a>
                     </td>
                 </tr>
                 <?php } ?>

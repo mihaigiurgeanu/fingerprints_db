@@ -92,17 +92,37 @@ class Fingerprintsscans extends CI_Controller {
     }
     
     public function get_scan_by_tokenid() {
-        log_message('debug', "get_scan_by_tokenid() - controller");
+        log_message('debug', "get_scan_by_tokenid() in controller called");
         if(is_user_authorized('scans.read') && is_user_authorized('tokens.read')) {
             $tokenid = $this->input->get('tokenid');
             if($tokenid) {
-                log_message('debug', "get_skan_by_tokenid - $tokenid");
-                $fingerprint = $this->fingerprints_model->get_fingerprint_by_tokenid($tokenid);
-                if($fingerprint) {
-                    $this->render_fingerprint($fingerprint);
+                log_message('debug', "get_scan_by_tokenid - $tokenid");
+                $kind = $this->input->get('kind');
+                if($kind === FALSE || ($kind != 'scan' && $kind != 'template')) {
+                    log_message('info', 'Request dose not have the "kind" query parameter');
+                    $this->output
+                        ->set_status_header('400', 'Expected kind parameter')
+                        ->set_output('"kind" query parameter expected to be either "scan" or "template"');
                 } else {
-                    log_message('info', "There is no scan for tokenid: $tokenid.");
-                    $this->output->set_status_header('404', 'Scan data not found');
+                    $fingerprint = $this->fingerprints_model->get_fingerprint_by_tokenid($tokenid);
+                    if($fingerprint) {
+                        switch($kind) {
+                            case 'scan':
+                            $this->render_fingerprint($fingerprint);
+                            break;
+                            
+                            case 'template':
+                            $this->output
+                                ->set_status_header('200')
+                                ->set_content_type('text/plain')
+                                ->set_output($fingerprint['template']);
+                            break;
+                        }
+                        
+                    } else {
+                        log_message('info', "There is no scan for tokenid: $tokenid.");
+                        $this->output->set_status_header('404', 'Scan data not found');
+                    }    
                 }
             } else {
                 $this->output->set_status_header('400', 'Tokenid is required');

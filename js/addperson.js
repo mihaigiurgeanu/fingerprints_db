@@ -25,7 +25,7 @@ $("#scan-button").click(function(e) {
                 if(data.command == this.data.command && data.tokenid == this.data.tokenid) {
                     if(data.success) {
                         $.notify({message: "Scan command completed"}, {type: "success"});
-                        $("#fingerprint-scan").attr("src", "/api/fingerprintsscans?tokenid=" + this.data.tokenid);
+                        $("#fingerprint-scan").attr("src", "/api/fingerprintsscans?tokenid=" + this.data.tokenid + "&kind=scan");
                         console.log("Setting value of scan_tokenid input: " + this.data.tokenid);
                         $("#person-form input[name=scan_tokenid]").val(this.data.tokenid);
                     } else {

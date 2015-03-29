@@ -22,7 +22,7 @@ class Tokens_model extends CI_model {
             // person fingerprint verification
             // 
             $person_id = $this->input->post('person_id');
-            $person = $this->db->persons_model->find_by_id($person_id);
+            $person = $this->persons_model->find_by_id($person_id);
             if(!$person) {
                 log_message('error', "Requested person id not found: $person_id");
                 return FALSE;

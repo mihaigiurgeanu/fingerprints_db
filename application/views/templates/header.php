@@ -33,6 +33,7 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <link href="/css/fingerprints_db.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>

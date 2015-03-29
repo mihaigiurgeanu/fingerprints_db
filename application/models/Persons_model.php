@@ -9,8 +9,11 @@ class Persons_model extends CI_Model {
     public function load_persons($search='', $page =1) {
         $num_rows = 50;
         $this->db->limit($num_rows, $num_rows*($page - 1));
-        $this->db->like("first_name", $search);
-        $this->db->or_like("last_name", $search);
+        $this->db->like('first_name', $search);
+        $this->db->or_like('last_name', $search);
+        $this->db->order_by('last_name');
+        $this->db->order_by('first_name');
+        
         $query = $this->db->get("fp_persons");
         return $query->result_array();
     }
@@ -59,7 +62,7 @@ class Persons_model extends CI_Model {
     
     public function find_by_id($id) {
         $query = $this->db->get_where('fp_persons', array("id" => $id));
-        return $query->result_array();
+        return $query->row_array();
     }
     
     

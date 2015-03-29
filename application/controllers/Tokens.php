@@ -14,13 +14,31 @@ class Tokens extends CI_Controller {
             
             
             // User is authorized to create tokens
+            $valid = true;
+            $token_type = $this->input->post('type');        
+            switch ($token_type) {
+                case 'verify':
+                $person_id = $this->input->post('person_id');
+                log_message('debug', "Checking valid person_id in request: '$person_id'");
+                if(! $person_id) {
+                    $this->output->set_status_header('400', 'Expected person_id');
+                    $valid = false;
+                }
+            }
             
-            $tokenid = $this->tokens_model->create_token();
-            $this->output
-                ->set_status_header('201')
-                ->set_content_type('application/json')
-                ->set_header('Location: '.$this->config->item('fingerprints_server_url')."api/tokens/$tokenid")
-                ->set_output(json_encode(array('id' => $tokenid)));
+            if($valid) {
+                $tokenid = $this->tokens_model->create_token();
+                if($tokenid) {
+                    $this->output
+                        ->set_status_header('201')
+                        ->set_content_type('application/json')
+                        ->set_header('Location: '.$this->config->item('fingerprints_server_url')."api/tokens/$tokenid")
+                        ->set_output(json_encode(array('id' => $tokenid)));
+                } else {
+                    $this->output->set_status_header('500', 'Token could not be created');
+                }                
+            }
+            
         }
     }
         

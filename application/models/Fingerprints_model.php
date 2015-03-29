@@ -97,7 +97,7 @@ class Fingerprints_model extends CI_model {
     
     public function get_fingerprint_by_tokenid($tokenid) {
         log_message('debug', "get_fingerprint_by_tokenid($tokenid)");
-        $this->db->select('fp_fingerprints.id, fp_fingerprints.file_name');
+        $this->db->select('fp_fingerprints.id, fp_fingerprints.file_name, fp_fingerprints.template');
         $this->db->from('fp_fingerprints');
         $this->db->join('fp_tokens', 'fp_tokens.fingerprint_id = fp_fingerprints.id');
         $this->db->where('fp_tokens.id', $tokenid);
